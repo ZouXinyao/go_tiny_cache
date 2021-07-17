@@ -1,4 +1,4 @@
-package go_tiny_cache
+package tinycache
 
 type ByteView struct {
 	b []byte

@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go_tiny_cache"
 	"log"
 	"net/http"
+	"tinycache"
 )
 
 var db = map[string]string{
@@ -14,8 +14,8 @@ var db = map[string]string{
 	"Sam":  "567",
 }
 
-func createGroup() *go_tiny_cache.Group {
-	return go_tiny_cache.NewGroup("scores", 2<<10, go_tiny_cache.GetterFunc(
+func createGroup() *tinycache.Group {
+	return tinycache.NewGroup("scores", 2<<10, tinycache.GetterFunc(
 		func(key string) ([]byte, error) {
 			log.Println("[SlowDB] search key", key)
 			if v, ok := db[key]; ok {
@@ -25,19 +25,19 @@ func createGroup() *go_tiny_cache.Group {
 		}))
 }
 
-func startCacheServer(addr string, addrs []string, gee *go_tiny_cache.Group) {
-	peers := go_tiny_cache.NewHTTPPool(addr)
+func startCacheServer(addr string, addrs []string, cacheGroup *tinycache.Group) {
+	peers := tinycache.NewHTTPPool(addr)
 	peers.Set(addrs...)
-	gee.RegisterPeers(peers)
+	cacheGroup.RegisterPeers(peers)
 	log.Println("go_tiny_cache is running at", addr)
 	log.Fatal(http.ListenAndServe(addr[7:], peers))
 }
 
-func startAPIServer(apiAddr string, gee *go_tiny_cache.Group) {
+func startAPIServer(apiAddr string, cacheGroup *tinycache.Group) {
 	http.Handle("/api", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			key := r.URL.Query().Get("key")
-			view, err := gee.Get(key)
+			view, err := cacheGroup.Get(key)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -70,9 +70,9 @@ func main() {
 		addrs = append(addrs, v)
 	}
 
-	gee := createGroup()
+	cacheGroup := createGroup()
 	if api {
-		go startAPIServer(apiAddr, gee)
+		go startAPIServer(apiAddr, cacheGroup)
 	}
-	startCacheServer(addrMap[port], []string(addrs), gee)
+	startCacheServer(addrMap[port], []string(addrs), cacheGroup)
 }

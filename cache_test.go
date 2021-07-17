@@ -1,4 +1,4 @@
-package go_tiny_cache
+package tinycache
 
 import (
 	"reflect"

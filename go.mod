@@ -1,4 +1,4 @@
-module go_tiny_cache
+module tinycache
 
 go 1.15
 

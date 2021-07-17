@@ -1,6 +1,6 @@
-package go_tiny_cache
+package tinycache
 
-import pb "go_tiny_cache/tinycachepb"
+import pb "tinycache/tinycachepb"
 
 // 根据传入的key值选择相应的节点，理解为客户端？
 type PeerPicker interface {
