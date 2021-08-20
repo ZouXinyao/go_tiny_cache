@@ -2,15 +2,16 @@ package tinycache
 
 import (
 	"fmt"
-	"github.com/golang/protobuf/proto"
-	"go_tiny_cache/consistenthash"
-	pb "go_tiny_cache/tinycachepb"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
 	"sync"
+	"tinycache/consistenthash"
+	pb "tinycache/tinycachepb"
+
+	"google.golang.org/protobuf/proto"
 )
 
 const (

@@ -1,13 +1,13 @@
 package tinycache
 
 import (
-	"go_tiny_cache/lru"
 	"sync"
+	"tinycache/lru"
 )
 
 type cache struct {
-	mu sync.Mutex
-	lru *lru.Cache
+	mu        sync.Mutex
+	lru       *lru.Cache
 	cacheSize int
 }
 

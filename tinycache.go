@@ -2,10 +2,10 @@ package tinycache
 
 import (
 	"fmt"
-	"go_tiny_cache/singleflight"
-	pb "go_tiny_cache/tinycachepb"
 	"log"
 	"sync"
+	"tinycache/singleflight"
+	pb "tinycache/tinycachepb"
 )
 
 type Getter interface {
